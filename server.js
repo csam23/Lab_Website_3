@@ -254,6 +254,8 @@ app.get('/player_info', function(req, res) {
             res.render('pages/player_info',{
         my_title: "Player Info",
         data: rows,
+        playerInfo: '',
+        games2: ''
       })
 
         })
@@ -263,6 +265,8 @@ app.get('/player_info', function(req, res) {
             response.render('pages/home', {
                 title: 'Player Info',
                 data: '',
+                playerInfo: '',
+                games2:''
             })
         })
 });
@@ -278,32 +282,36 @@ app.get('/player_info', function(req, res) {
           3. Retrieve the total number of football games the player has played in
 */
 
-app.get('/player_info/select_player', function(req, res) {
-  var player_id = req.query.player_selection;
-  var color_options =  'select * from favorite_colors;';
-  var color_message = "select color_msg from favorite_colors where hex_value = '" + color_choice + "';"; 
+app.get('/player_info/post', function(req, res) {
+  var player_id = req.query.player_choice;
+  var players = 'select ID, name from football_players;';
+  var player_info = 'select * from football_players where id='+player_id+';';
+  var games_played = 'SELECT count(*) from football_games where ('+player_id+') = ANY(players);'; 
+
   db.task('get-everything', task => {
         return task.batch([
-            task.any(color_options),
-            task.any(color_message)
+            task.any(players),
+            task.any(player_info),
+            task.any(games_played)
         ]);
     })
     .then(info => {
-      res.render('pages/home',{
-        my_title: "Home Page",
+      console.log(info[2]);
+      res.render('pages/player_info',{
+        my_title: "Player Info",
         data: info[0],
-        color: color_choice,
-        color_msg: info[1][0].color_msg
+        playerInfo:info[1],
+        games2: info[2][0].count
       })
     })
     .catch(error => {
         // display error message in case an error
-            request.flash('error', err);
+            //request.flash('error', err);
+            console.log(error);
             response.render('pages/home', {
-                title: 'Home Page',
-                data: '',
-                color: '',
-                color_msg: ''
+                title: 'Player Info',
+                playerInfo: '',
+                games: '',
             })
     });
   
