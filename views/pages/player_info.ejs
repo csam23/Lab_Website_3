@@ -53,36 +53,56 @@
 							 			If a player has been selected, fill in their information in each of the fields below.
 							 		    You'll need to calculate here the player's average rushing, receiving, and passing yards.-->
 
-							 <%if (playerInfo){
-							 	console.log(playerInfo);
-							 }%>
+							 
 
 							 <%if (games2){
-							 	console.log(playerInfo);
+							 	var avg_py = parseInt(playerInfo[0].passing_yards)/parseInt(games2);
+							 	var ru = parseInt(playerInfo[0].rushing_yards)/parseInt(games2);
+							 	var re = parseInt(playerInfo[0].receiving_yards)/parseInt(games2);
+
 							 }%>
 
 							<th>Year</th>
-							<td>	</td>
+							 <%if (playerInfo){ 
+							 	console.log(playerInfo);
+							 		%>
+
+							 	<td> <%= playerInfo[0].name %> </td>
+
+							 <% }%>
+							
 						</tr>
 						<tr>
 							<th>Major</th>
 							<td>	</td>
+							<%if (playerInfo){ 
+							 		%>
+
+							 	<td> <%= playerInfo[0].major %> </td>
+
+							 <% }%>
 						</tr>
 						<tr>
 							<th>Games Played</th>
-							<td>	</td>
+							<%if (games2){ 
+							 	console.log(playerInfo.name);
+							 		%>
+
+							 	<td> <%= games2 %> </td>
+
+							 <% }%>
 						</tr>
 						<tr>
-							<td>Passing Yards: </td>
-							<td>Avg. Passing Yards: </td>
+							<td>Passing Yards: <%= playerInfo[0].passing_yards%> </td>
+							<td>Avg. Passing Yards: <%=avg_py%> </td>
 						</tr>
 						<tr>
-							<td>Rushing Yards: </td>
-							<td>Avg. Rushing Yards: </td>
+							<td>Rushing Yards: <%= playerInfo[0].rushing_yards%> </td>
+							<td>Avg. Rushing Yards: <%= ru %> </td>
 						</tr>
 						<tr>
-							<td>Receiving Yards: </td>
-							<td>Avg. Receiving Yards: </td>
+							<td>Receiving Yards:  <%= playerInfo[0].receiving_yards%></td>
+							<td>Avg. Receiving Yards: <%= re%> </td>
 						</tr>
 					</table>
 				</div>
